@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+  <div class="mediaplayer">
+    <div class="video">
+        <video id="player" src="try.mp4" poster="video.png" width="500" height="500">
+            Video player not available.
+        </video>
+    </div>
+    <div class="controls">
+        <input type="button" value="Play" id="video-btn">
+        <span id="curtime">0</span>/<span id="duration">0</span>
+    </div>
+</div>
+<script>
+var player = document.getElementById("player"),
+  btn = document.getElementById("video-btn"),
+  curtime = document.getElementById("curtime"),
+  duration = document.getElementById("duration");
+
+  // 元数据已加载时，获取视频时间
+  player.onloadedmetadata = (function () {
+    var allTime = player.duration
+    console.log(allTime)
+        m = Math.floor(allTime / 60);
+    m < 10 && (m = '0' + m);
+    duration.innerHTML = m + ":" + (allTime % 60 / 100).toFixed(2).slice(-2);
+  })
+
+  // 点击按钮，触发视频播放、暂停事件
+  btn.onclick = function() {
+    if (player.paused) {
+        player.play();
+        btn.value = "暂停";
+    } else {
+        player.pause();
+        btn.value = "播放";
+    }
+  };
+
+  // 视频播放结束
+  player.onended = function() {
+    btn.value = "播放";
+  };
+
+  // 播放时间计时
+  var x = setTimeout(function timing() {
+    playTime = player.currentTime;
+    var m = Math.floor(playTime / 60);
+    m < 10 && (m = '0' + m);
+    curtime.innerHTML = m + ":" + (playTime % 60 / 100).toFixed(2).slice(-2);
+    var y = setTimeout(timing, 100);
+    y = null;
+  }, 100);
+  x = null;
+</script>
+  </body>
+</html>
